@@ -19,8 +19,8 @@
   (reset! new {:page "" :section "" :value ""}))
 
 (defn row-editor [data]
-  (let [page (atom (-> @data keys first))
-        section (atom (-> (get @data @page) keys first))
+  (let [page (reaction (-> @data keys first))
+        section (reaction (-> (get @data @page) keys first))
         row (reaction (-> @data (get @page) (get @section)))
         new-row (atom nil)]
     (fn []
@@ -54,8 +54,6 @@
           (if @new-row
             [:button {:class    "btn"
                       :on-click #(do (re-frame/dispatch [:save @new-row])
-                                     (reset! page (:page @new-row))
-                                     (reset! section (:section @new-row))
                                      (reset-edit-mode new-row))} "Save"]
             [:button {:class    "btn"
                       :on-click #(re-frame/dispatch [:update @row])} "Update"])
@@ -68,6 +66,7 @@
 (defn app []
   (let [content (re-frame/subscribe [:content])]
     (fn []
+      (println @content)
       [:div
        [:div.page-header [:h1 "CMS"]]
        (f/form

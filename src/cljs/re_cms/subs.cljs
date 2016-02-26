@@ -9,8 +9,9 @@
        (map-vals first)))
 
 (re-frame/register-sub
- :content
- (fn [db]
-   (reaction (->> @db
-                  (group-by :page)
-                  (map-vals page->section-mapping)))))
+  :content
+  (fn [db]
+    (reaction (->> @db
+                   :values
+                   (group-by :page)
+                   (map-vals page->section-mapping)))))
