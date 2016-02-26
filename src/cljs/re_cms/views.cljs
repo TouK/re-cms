@@ -4,11 +4,6 @@
             [re-frame.core :as re-frame]
             [reforms.core :as f]))
 
-(defn current-row [data page section]
-  (-> @data
-      (get @page)
-      (get @section)))
-
 (defn content-textarea [value update-fn]
   [:div.col-md-8
    [:div.form-group
@@ -17,30 +12,58 @@
                 :value     value
                 :on-change update-fn}]]])
 
+(defn- reset-edit-mode [new]
+  (reset! new nil))
+
+(defn- activate-edit-mode [new]
+  (reset! new {:page "" :section "" :value ""}))
+
 (defn row-editor [data]
-  (let [page (reaction (-> @data keys first))
-        section (reaction (-> (get @data @page) keys first))
-        message (atom nil)]
+  (let [page (atom (-> @data keys first))
+        section (atom (-> (get @data @page) keys first))
+        row (reaction (-> @data (get @page) (get @section)))
+        new-row (atom nil)]
     (fn []
       [:div.col-md-8
        [:div.row
         [:div.col-md-4
-         [:select.form-control {:on-change (fn [e] (reset! page (.. e -target -value)))}
-          (for [option (keys @data)]
-            ^{:key option} [:option option])]]
+         (if @new-row
+           [:input.form-control {:type "text" :value (:page @new-row)
+                                 :on-change #(swap! new-row assoc :page (-> % .-target .-value))}]
+           [:select.form-control {:value @page
+                                  :on-change #(reset! page (-> % .-target .-value))}
+            (for [option (keys @data)]
+              ^{:key option} [:option option])])]
         [:div.col-md-4
-         [:select.form-control {:on-change (fn [e] (reset! section (.. e -target -value)))}
-          (for [option (-> (get @data @page) keys)]
-            ^{:key option} [:option option])]]]
+         (if @new-row
+           [:input.form-control {:type "text" :value (:section @new-row)
+                                 :on-change #(swap! new-row assoc :section (-> % .-target .-value))}]
+           [:select.form-control {:value @section
+                                  :on-change #(reset! section (-> % .-target .-value))}
+            (for [option (-> (get @data @page) keys)]
+              ^{:key option} [:option option])])]]
        [:div.row
-        (content-textarea (:value (current-row data page section))
-                          #(println "update"))]
+        (if @new-row
+          (content-textarea (:value @new-row)
+                            #(swap! new-row assoc :value (-> % .-target .-value)))
+          (content-textarea (:value @row)
+                            #(swap! row assoc :value (-> % .-target .-value))))]
        [:div.row
         [:div.col-md-12
          [:div.form-group
-          [:button {:class    "btn"
-                    :on-click #(println "on-click")} "Nowa"]
-          [:span @message]]]]])))
+          (if @new-row
+            [:button {:class    "btn"
+                      :on-click #(do (re-frame/dispatch [:save @new-row])
+                                     (reset! page (:page @new-row))
+                                     (reset! section (:section @new-row))
+                                     (reset-edit-mode new-row))} "Save"]
+            [:button {:class    "btn"
+                      :on-click #(re-frame/dispatch [:update @row])} "Update"])
+          (if @new-row
+            [:button {:class    "btn"
+                      :on-click #(reset-edit-mode new-row)} "Cancel"]
+            [:button {:class    "btn"
+                      :on-click #(activate-edit-mode new-row)} "New entry"])]]]])))
 
 (defn app []
   (let [content (re-frame/subscribe [:content])]

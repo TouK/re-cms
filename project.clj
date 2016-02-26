@@ -3,6 +3,7 @@
                  [org.clojure/clojurescript "1.7.170"]
                  [reagent "0.5.1"]
                  [re-frame "0.6.0"]
+                 [cljs-http "0.1.39"]
                  [prismatic/plumbing "0.5.2"]
                  [reagent-reforms "0.4.3"]
                  [compojure "1.4.0"]
