@@ -1,4 +1,5 @@
 (ns re-cms.db)
 
 (def default-db
-  {:values  []})
+  {:base-uri "/"
+   :values   []})

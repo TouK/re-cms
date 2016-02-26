@@ -2,11 +2,13 @@
 <html lang="en">
   <head>
     <meta charset='utf-8'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/main.css"/>
   </head>
   <body>
     <div id="app"></div>
     <script src="js/compiled/app.js"></script>
-    <script>re_cms.core.init(document.getElementById("app"));</script>
+    <script>re_cms.core.init(document.getElementById("app"), "http://localhost:8080");</script>
   </body>
 </html>

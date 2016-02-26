@@ -4,6 +4,7 @@
                  [reagent "0.5.1"]
                  [re-frame "0.6.0"]
                  [cljs-http "0.1.39"]
+                 [markdown-clj "0.9.86"]
                  [prismatic/plumbing "0.5.2"]
                  [reagent-reforms "0.4.3"]
                  [compojure "1.4.0"]
@@ -23,7 +24,8 @@
 
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs"]
-                        :figwheel {:on-jsload "re-cms.core/mount-root"}
+                        :figwheel {:on-jsload "re-cms.core/fig-init"
+                                   :css-dirs ["resources/public/css"]}
                         :compiler {:main re-cms.core
                                    :output-to "resources/public/js/compiled/app.js"
                                    :output-dir "resources/public/js/compiled/out"

@@ -12,6 +12,9 @@
 (defn mount-root [elem]
   (reagent/render [views/app] elem))
 
-(defn ^:export init [elem]
-  (re-frame/dispatch-sync [:initialize-db])
+(defn ^:export init [elem url]
+  (re-frame/dispatch-sync [:initialize-db url])
   (mount-root elem))
+
+(defn fig-init []
+  (mount-root (.getElementById js/document "app")))

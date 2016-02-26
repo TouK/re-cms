@@ -5,24 +5,23 @@
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]))
 
-(def api-root "http://localhost:8080")
+(defn content-url [root]
+  (str root "/content"))
 
-(def content-url (str api-root "/content"))
-
-(defn section-url [page section]
-  (str api-root "/content/" page "/" section))
+(defn section-url [root page section]
+  (str root "/content/" page "/" section))
 
 (re-frame/register-handler
   :initialize-db
-  (fn [_ _]
-    (re-frame/dispatch [:sync-db])
-     db/default-db))
+  (fn [_ [_ url]]
+    (re-frame/dispatch [:sync-db url])
+    (assoc db/default-db :base-uri url)))
 
 (re-frame/register-handler
   :sync-db
-  (fn [db _]
+  (fn [db [_ url]]
     (go
-      (let [response (<! (http/get content-url))]
+      (let [response (<! (http/get (content-url url)))]
         (re-frame/dispatch [:sync-db-response (:body response)])))
     db))
 
@@ -34,7 +33,7 @@
 (re-frame/register-handler
   :save
   (fn [db [_ {:keys [page section value] :as row}]]
-    (go (http/post (section-url page section) {:json-params {:text value}}))
+    (go (http/post (section-url (:base-uri db) page section) {:json-params {:text value}}))
     (assoc db :values
               (->> (:values db)
                    (cons row)))))
@@ -42,7 +41,7 @@
 (re-frame/register-handler
   :update
   (fn [db [_ {:keys [page section value] :as row}]]
-    (go (http/put (section-url page section) {:json-params {:text value}}))
+    (go (http/put (section-url (:base-uri db) page section) {:json-params {:text value}}))
     (assoc db :values
               (->>
                 (:values db)
