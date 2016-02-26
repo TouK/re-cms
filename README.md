@@ -1,7 +1,7 @@
 # re-cms
 
 A [re-frame](https://github.com/Day8/re-frame) application designed to edit CMS content served inside your web application. 
-There is example [Spring Boot]() starter backend [here](). 
+The example [Spring Boot](http://projects.spring.io/spring-boot/) starter backend would be released soon. 
 
 ## Development Mode
 
