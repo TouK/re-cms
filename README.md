@@ -2,7 +2,7 @@
 
 ![re-cms](re-cms.png)
 
-A [re-frame](https://github.com/Day8/re-frame) application designed to edit CMS content served inside your web application. 
+A [re-frame](https://github.com/Day8/re-frame) application designed to edit Markdown content served inside your web application. 
 The example [Spring Boot](http://projects.spring.io/spring-boot/) starter backend would be released soon. 
 
 ## Development Mode
