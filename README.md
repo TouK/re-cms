@@ -1,5 +1,7 @@
 # re-cms
 
+![re-cms](re-cms.png)
+
 A [re-frame](https://github.com/Day8/re-frame) application designed to edit CMS content served inside your web application. 
 The example [Spring Boot](http://projects.spring.io/spring-boot/) starter backend would be released soon. 
 
@@ -22,3 +24,9 @@ Wait a bit, then browse to [http://localhost:3449](http://localhost:3449).
 lein clean
 lein cljsbuild once min
 ```
+
+## Licence
+
+Copyright © 2016 TouK
+
+Distributed under The MIT License (MIT) 
