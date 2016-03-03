@@ -13,9 +13,10 @@
 (defn- select-component [key value-ref options new-row-ref]
   [:div.col-md-6
    (if @new-row-ref
-     [:input {:class     "form-control re-input"
-              :type      "text" :value (get @new-row-ref key)
-              :on-change #(swap! new-row-ref assoc key (-> % .-target .-value))}]
+     [:input {:class       "form-control re-input"
+              :placeholder (name key)
+              :type        "text" :value (get @new-row-ref key)
+              :on-change   #(swap! new-row-ref assoc key (-> % .-target .-value))}]
      [:select {:class     "form-control re-input"
                :value     @value-ref
                :on-change #(reset! value-ref (-> % .-target .-value))}
